@@ -1,11 +1,13 @@
 
 plugins {
     id 'java'
-    id "com.jfrog.bintray" version "1.8.0"
+    id 'signing'
+    id 'maven-publish'
+    id "com.jfrog.bintray" version "1.8.5"
 }
 
 group 'com.problemfighter.java.oc'
-version '1.0.0-SNAPSHOT'
+version '1.0.0'
 
 repositories {
     mavenCentral()
@@ -40,8 +42,12 @@ dependencies {
     compile group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final'
 }
 
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allJava
+    archiveClassifier = 'sources'
+}
 
-Boolean isPublish = false
+Boolean isPublish = true
 if (isPublish) {
     bintray {
 
@@ -51,9 +57,12 @@ if (isPublish) {
         override = true
         publications = ['mavenJava']
         pkg {
-            repo = 'maven'
+            repo = 'java'
             name = 'com.problemfighter.java.oc'
+            desc = 'Problem Fighter Java Object Copier'
             vcsUrl = 'https://github.com/problemfighter/pf-java-object-copier.git'
+            websiteUrl = 'https://github.com/problemfighter/pf-java-object-copier'
+            issueTrackerUrl = 'https://github.com/problemfighter/pf-java-object-copier/issues'
             licenses = ['Apache-2.0']
         }
     }
