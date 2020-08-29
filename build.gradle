@@ -1,5 +1,7 @@
+
 plugins {
     id 'java'
+    id "com.jfrog.bintray" version "1.8.0"
 }
 
 group 'com.problemfighter.java.oc'
@@ -7,6 +9,9 @@ version '1.0.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
+    jcenter()
+    maven { url "https://dl.bintray.com/hmtmcse/maven/" }
+    maven { url "https://dl.bintray.com/problemfighter/java/" }
 }
 
 javadoc {
@@ -33,4 +38,69 @@ task makeDoc {
 
 dependencies {
     compile group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final'
+}
+
+
+Boolean isPublish = false
+if (isPublish) {
+    bintray {
+
+        user = (project.hasProperty('bintrayUser') ? project.property('bintrayUser') : "hmtmcse" )
+        key =  (project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : "123" )
+        publish = true
+        override = true
+        publications = ['mavenJava']
+        pkg {
+            repo = 'maven'
+            name = 'com.problemfighter.java.oc'
+            vcsUrl = 'https://github.com/problemfighter/pf-java-object-copier.git'
+            licenses = ['Apache-2.0']
+        }
+    }
+
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                artifactId = 'pf-java-object-copier'
+                groupId = 'com.problemfighter.java.oc'
+                from components.java
+                artifact sourcesJar
+                versionMapping {
+                    usage('java-api') {
+                        fromResolutionOf('runtimeClasspath')
+                    }
+                    usage('java-runtime') {
+                        fromResolutionResult()
+                    }
+                }
+                pom {
+                    name = 'Problem Fighter Java Object Copier'
+                    description = 'Problem Fighter Java Object Copier'
+                    url = 'http://www.hmtmcse.com/opensource/java/oc'
+                    licenses {
+                        license {
+                            name = 'The Apache License, Version 2.0'
+                            url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id = 'hmtmcse'
+                            name = 'H.M Touhid Mia'
+                            email = 'hmtm.cse@gmail.com'
+                        }
+                    }
+                    scm {
+                        connection = 'scm:git:https://github.com/problemfighter/pf-java-object-copier.git'
+                        developerConnection = 'scm:git:https://github.com/problemfighter/pf-java-object-copier.git'
+                        url = 'https://github.com/problemfighter/pf-java-object-copier'
+                    }
+                }
+            }
+        }
+    }
+
+    signing {
+        sign publishing.publications.mavenJava
+    }
 }
