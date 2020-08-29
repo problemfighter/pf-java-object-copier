@@ -1,0 +1,36 @@
+plugins {
+    id 'java'
+}
+
+group 'com.problemfighter.java.oc'
+version '1.0.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+javadoc {
+    source = sourceSets.main.allJava
+    classpath = configurations.compile
+    options.addBooleanOption('html5', true)
+}
+
+task makeDoc {
+    dependsOn(javadoc)
+    doLast {
+        def docDirectory = file("docs")
+        if (!docDirectory.exists()){
+            docDirectory.mkdirs();
+        }
+        delete "docs/javadoc"
+        copy{
+            from "$buildDir/docs/javadoc"
+            into 'docs/javadoc'
+        }
+    }
+}
+
+
+dependencies {
+    compile group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final'
+}
