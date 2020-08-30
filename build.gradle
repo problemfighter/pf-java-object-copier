@@ -6,14 +6,19 @@ plugins {
     id "com.jfrog.bintray" version "1.8.5"
 }
 
-group 'com.problemfighter.java.oc'
-version '1.0.0'
 
 repositories {
     mavenCentral()
     jcenter()
     maven { url "https://dl.bintray.com/hmtmcse/maven/" }
     maven { url "https://dl.bintray.com/problemfighter/java/" }
+}
+
+group 'com.problemfighter.java.oc'
+version '1.0.0'
+
+dependencies {
+    compile group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final'
 }
 
 javadoc {
@@ -37,17 +42,17 @@ task makeDoc {
     }
 }
 
-
-dependencies {
-    compile group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final'
-}
-
 task sourcesJar(type: Jar) {
     from sourceSets.main.allJava
     archiveClassifier = 'sources'
 }
 
-Boolean isPublish = true
+task javadocJar(type: Jar) {
+    from javadoc
+    archiveClassifier = 'javadoc'
+}
+
+Boolean isPublish = false
 if (isPublish) {
     bintray {
 
@@ -74,6 +79,7 @@ if (isPublish) {
                 groupId = 'com.problemfighter.java.oc'
                 from components.java
                 artifact sourcesJar
+                artifact javadocJar
                 versionMapping {
                     usage('java-api') {
                         fromResolutionOf('runtimeClasspath')
