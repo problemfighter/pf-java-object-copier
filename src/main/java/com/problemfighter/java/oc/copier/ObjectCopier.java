@@ -313,6 +313,8 @@ public class ObjectCopier {
             return null;
         } else if (reflectionProcessor.isPrimitive(source.getClass())) {
             return source;
+        } else if (source.getClass().isEnum()) {
+            return source;
         } else if (reflectionProcessor.isList(source.getClass())) {
             return processList(source, klass);
         } else if (reflectionProcessor.isMap(source.getClass())) {
