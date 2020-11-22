@@ -15,7 +15,7 @@ repositories {
 }
 
 group 'com.problemfighter.java.oc'
-version '1.0.0'
+version '1.0.1'
 
 dependencies {
     compile group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final'
