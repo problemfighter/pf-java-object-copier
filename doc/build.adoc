@@ -1,1 +1,5 @@
 bash gradlew :pf-java-object-copier:clean && bash gradlew :pf-java-object-copier:build && bash gradlew :pf-java-object-copier:bintrayUpload
+
+== Need to update
+* Add Ignore field
+* map with different field
